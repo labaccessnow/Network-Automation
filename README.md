@@ -73,6 +73,19 @@ returned a suspiciously short capture, so it's safe to alert on from cron:
 - **Fail loud** — empty or truncated captures are flagged and set a non-zero exit.
 - **Portable** — pure Python; the optional bits (pexpect, proxmoxer) degrade gracefully.
 
+## Why this still matters (context)
+
+Network automation has matured fast — **NetBox** as a source of truth with nightly drift
+reconciliation, and **Event-Driven Ansible** (GA in AAP 2.4; expanded in **AAP 2.5, Sep 30 2024**)
+reacting to change as it happens. But all of that assumes one thing: a reliable, current capture of
+what each device is *actually* running. You can't diff, reconcile, or recover what you never backed up.
+
+This tool is the dependable layer underneath: a timestamped, **read-only** record of every device's
+real config — across a fleet that doesn't share one API or even one transport (SSH exec, interactive
+shell, REST, telnet, legacy KEX, and serial-over-terminal-server). It pairs naturally with a
+source-of-truth/GitOps workflow (commit the captures, diff against intent) and is small enough to run
+from cron on day one.
+
 ## License
 
 GPL-3.0 — see [LICENSE](LICENSE).
