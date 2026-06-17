@@ -1,0 +1,5 @@
+paramiko>=3.0      # SSH (exec + interactive shell) for IOS-like, RouterOS, EdgeOS
+PyYAML>=6.0        # inventory parsing
+pexpect>=4.8       # digicm + console (legacy-KEX system-ssh driving)
+proxmoxer>=2.0     # optional: Proxmox SDN snapshot (only if PROXMOX_* env vars set)
+# telnetlib (Lantronix SLP) is stdlib; removed in Python 3.13 — use 3.12 for SLP support.

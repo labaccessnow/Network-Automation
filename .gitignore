@@ -1,0 +1,8 @@
+# Never commit your real inventory or any secrets/backups
+devices.yaml
+secrets.*
+backups/
+*.conf
+__pycache__/
+*.pyc
+.venv/

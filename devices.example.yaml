@@ -1,0 +1,55 @@
+# Example inventory — copy to devices.yaml and edit for your estate.
+# NO secrets go in here. Each device's password/API secret is read from an
+# environment variable derived from its label (uppercased, non-alphanumeric -> _):
+#
+#   label: core-switch   ->   NB_CORE_SWITCH_PASS
+#   label: fw-1 (opnsense) -> NB_FW_1_APIKEY  +  NB_FW_1_APISECRET
+#   console_gateway        -> NB_CONSOLE_GW_PASS
+#
+# Source those from your secret store at runtime, e.g.:
+#   export NB_CORE_SWITCH_PASS="$(sops -d --extract '["core_switch"]["password"]' secrets.json)"
+
+# Optional: a serial terminal server that "console"-type devices are reached through.
+console_gateway:
+  host: 0.0.0.0
+  user: admin
+
+devices:
+  - label: edge-router          # Ubiquiti EdgeRouter
+    type: edgeos
+    host: 0.0.0.0
+    user: admin
+    # cmd: cat /config/config.boot   # (default for edgeos)
+
+  - label: core-switch          # Cisco IOS / IOS-XE, or Ubiquiti EdgeSwitch (FASTPATH)
+    type: ios
+    host: 0.0.0.0
+    user: admin
+
+  - label: mikrotik-1           # MikroTik RouterOS
+    type: routeros
+    host: 0.0.0.0
+    user: admin
+
+  - label: fw-1                 # OPNsense (full config.xml via REST API)
+    type: opnsense
+    host: 0.0.0.0
+    scheme: https
+    # creds: NB_FW_1_APIKEY + NB_FW_1_APISECRET
+
+  - label: pdu-1                # Lantronix SecureLinx SLP PDU (telnet)
+    type: slp
+    host: 0.0.0.0
+    user: admin
+
+  - label: term-server          # Digi CM terminal server (legacy KEX)
+    type: digicm
+    host: 0.0.0.0
+    user: root
+
+  - label: console-router       # reached only via the console_gateway redirect port
+    type: console
+    console_type: routeros      # or: edgeos
+    host: 0.0.0.0             # the gateway IP
+    port: 7002                  # the per-port redirect TCP port
+    user: admin
