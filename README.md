@@ -86,6 +86,22 @@ shell, REST, telnet, legacy KEX, and serial-over-terminal-server). It pairs natu
 source-of-truth/GitOps workflow (commit the captures, diff against intent) and is small enough to run
 from cron on day one.
 
+## Lessons learned
+- **Old gear doesn't speak modern SSH, and that's the whole design.** The Lantronix PDUs only do
+  telnet; the Digi terminal server only offers legacy key exchange (`diffie-hellman-group1-sha1`)
+  that paramiko refuses outright. So the tool uses paramiko for the modern fleet and drives the
+  legacy boxes through system `ssh` with explicit `KexAlgorithms=+...` via pexpect. One backup
+  tool, three different ways in — because a real estate is never one vendor or one transport.
+- **A "successful" backup of an empty file is worse than a failure.** It looks fine right up until
+  you need to restore. The tool flags any capture under ~200 bytes and exits non-zero, so cron
+  actually alerts instead of quietly archiving nothing.
+- **Each vendor fights scripted reads differently.** RouterOS redraws the screen and mangles input
+  (the `+ct` dumb-terminal login fixes it); FASTPATH/IOS pages with `--More--`. There is no
+  one-size capture loop — each transport needed its own, and pretending otherwise just gives you
+  truncated configs.
+- **Pin the runtime.** `telnetlib` was removed from the Python 3.13 standard library, so the
+  Lantronix path needs 3.12. The Python version is part of the tool's contract, not an afterthought.
+
 ## License
 
 GPL-3.0 — see [LICENSE](LICENSE).
