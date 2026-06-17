@@ -1,12 +1,19 @@
 # Network Automation
 
-Treating the network like code: automated configuration management, a single source of
-truth, and operational reporting across a multi-site, multi-vendor environment.
+Treating the network like code — a single source of truth, automated configuration,
+and continuous reconciliation across a multi-site, multi-vendor estate.
 
-## Focus
-- Scheduled config backup / restore across Cisco, OPNsense, MikroTik, EdgeOS, and EdgeSwitch
-- NetBox as source of truth, reconciled automatically into DNS / DHCP
-- BGP edge automation (single- to dual-homed multi-homing) and SDN / VLAN provisioning
-- Reporting and integrations written against vendor REST APIs in Python
+## What I build
+- **Source of truth** — NetBox holds intended state (IPAM, VLANs, interfaces);
+  automation reads it as inventory and reconciles DNS / DHCP from it on a schedule.
+- **Config backup & drift** — scheduled backups across Cisco IOS/IOS-XE, OPNsense,
+  MikroTik RouterOS, Ubiquiti EdgeOS, and EdgeSwitch, with diff-against-intent so the
+  network reports its own drift instead of silently rotting.
+- **Routing & SDN** — BGP edge automation (re-architected an ISP edge from single- to
+  dual-homed multi-homing) plus SDN/VLAN provisioning.
+- **Vendor-API tooling** — operational reporting and integrations written against
+  vendor REST APIs in Python.
 
-The goal is a network that documents and reconciles itself instead of drifting.
+## Approach
+Intent lives in git and NetBox; changes flow through review and dry-runs; reality is
+diffed against intent on a cron so nothing drifts unnoticed.
