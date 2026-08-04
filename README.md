@@ -104,4 +104,4 @@ from cron on day one.
 
 ## License
 
-GPL-3.0 — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
